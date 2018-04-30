@@ -10,7 +10,7 @@ pipeline {
             steps {
                 sh "chmod +x ./Vagrant/vagrant_up_and_env.sh"
                 sh "cd ./Vagrant"
-                sh "vagrant_up_and_env.sh"
+                sh "./vagrant_up_and_env.sh"
             }
         }
     }
