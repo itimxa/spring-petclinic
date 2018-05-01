@@ -6,7 +6,7 @@ pipeline{
 	stages{
 		stage('git clone'){
 			steps{
-			 checkoit scm
+			 checkout scm
 			}
 			}
 		stage('build'){
