@@ -1,16 +1,18 @@
-pipeline {
-    agent any 
-    stages {
-        stage('git clone'){
-          steps{
-              checkout scm
-          }  
-        }
-        stage('everything') { 
-            steps {
-                sh "chmod +x ./Vagrant/vagrant_up_and_env.sh"
-                sh "cd ./Vagrant && ./vagrant_up_and_env.sh"
-            }
-        }
-    }
+pipeline{
+	agent all
+	tools {
+		maven 'mvn 3.5'
+	}
+	stages{
+		stage('git clone'){
+			steps{
+			 checkoit scm
+			}
+			}
+		stage('build'){
+			steps{
+			sh 'mvn mvnm  package'
+			}
+			}
+		}
 }
