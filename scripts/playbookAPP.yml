@@ -43,16 +43,17 @@
 
   - name: check connect to db
     wait_for:
+      delay: 30
       host: 10.10.0.115
       port: 3306
       timeout: 60
 
   - name: check user abilities
     mysql_db:
-      login_user: "{{ db_login }}"
-      login_password: "{{ db_pass }}"
-      login_host: "{{ db_ip }}"
-      name: "{{ db_name }}"
+      login_user: "{{ DB_USER }}"
+      login_password: "{{ DB_PASS }}"
+      login_host: "{{ DB_HOST }}"
+      name: "{{ DB_NAME }}"
       state: present
 
   - name: copy jar to application
