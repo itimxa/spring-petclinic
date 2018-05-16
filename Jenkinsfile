@@ -31,12 +31,12 @@ pipeline{
 				parallel(
 				a : {
 					withCredentials([sshUserPrivateKey(credentialsId: "ssh_key", keyFileVariable: 'keyfile'), file(credentialsId: 'vars', variable: 'vars')]){		 
-					sh 'ansible-playbook ./scripts/playbookDB.yml -e "@${vars}" -i ./hosts --private-key=${keyfile}'
+					sh 'ansible-playbook ./scripts/playbookDB.yml -e "@${vars}" -i ./hosts --private-key=${keyfile} --ssh-common-args="-o StrictHostKeyChecking=no"'
 					}
 				},
 				b : {
 					withCredentials([sshUserPrivateKey(credentialsId: "ssh_key", keyFileVariable: 'keyfile'), file(credentialsId: 'vars', variable: 'vars')]){	
-					sh 'ansible-playbook ./scripts/playbookAPP.yml -e "@${vars}" -i ./hosts --private-key=${keyfile}'
+					sh 'ansible-playbook ./scripts/playbookAPP.yml -e "@${vars}" -i ./hosts --private-key=${keyfile} --ssh-common-args="-o StrictHostKeyChecking=no"'
 					}	
 				}
 				)
