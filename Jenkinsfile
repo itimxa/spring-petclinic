@@ -1,5 +1,5 @@
 pipeline{
-	agent any
+	agent {label 'wrkr'}
 	tools {
 		maven 'mvn 3.5'
 	}
