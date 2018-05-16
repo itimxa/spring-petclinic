@@ -30,12 +30,12 @@ pipeline{
        		steps{
 				parallel(
 				a : {
-					withCredentials([sshUserPrivateKey(credentialsId: "ssh_key", keyFileVariable: 'keyfile')], [file(credentialsId: 'vars', variable: 'vars.yml')]){		 
+					withCredentials([sshUserPrivateKey(credentialsId: "ssh_key", keyFileVariable: 'keyfile'), file(credentialsId: 'vars', variable: 'vars.yml')]){		 
 					sh 'ansible-playbook ./scripts/playbookDB.yml -e "@${vars.yml}" -i ./scripts/hosts --private-key=${keyfile}'
 					}
 				},
 				b : {
-					withCredentials([sshUserPrivateKey(credentialsId: "ssh_key", keyFileVariable: 'keyfile')], [file(credentialsId: 'vars', variable: 'vars.yml')]){	
+					withCredentials([sshUserPrivateKey(credentialsId: "ssh_key", keyFileVariable: 'keyfile'), file(credentialsId: 'vars', variable: 'vars.yml')]){	
 					sh 'ansible-playbook ./scripts/playbookAPP.yml -e "@${vars.yml}" -i ./scripts/hosts --private-key=${keyfile}'
 					}	
 				}
