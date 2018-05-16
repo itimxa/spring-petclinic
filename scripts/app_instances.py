@@ -17,7 +17,7 @@ except ValueError:
 
 except IndexError:
     app_instances_quantity = 1
-    my_filter = [{'Name': 'tag:Name', 'Values': [filter_key]}]
+    my_filter = [{'Name': 'tag:Name', 'Values': ['vadim*']}]
 
 # get my subnet name
 
