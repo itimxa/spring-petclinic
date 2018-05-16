@@ -1,0 +1,67 @@
+---
+- hosts: DB_M
+  remote_user: ec2-user
+  become_method: sudo
+  vars:
+    db_login: "{{ DB_USER }}"
+    db_pass: "{{ DB_PASS }}"
+    db_name: "{{ DB_NAME }}"
+    db_ip: "{{ DB_HOST }}"
+
+  tasks:
+  - name: instal mysql and MySQL-python
+    yum:
+      name:
+        - mariadb-server
+        - MySQL-python
+      state: present
+    become: yes
+  - name: UP MySQL
+    systemd:
+      name: mariadb
+      state: started
+      enabled: yes
+    become: yes
+    
+  - name: create DB
+    mysql_db:
+      name: "{{ db_name }}"
+      state: present
+      login_user: root
+
+  - name: create user for MySQL
+    mysql_user:
+      name: '{{ db_login }}'
+      password: '{{ db_pass }}'
+      login_user: root
+      priv: '{{ db_name }}.*:ALL'
+      host: 10.10.0.%
+
+  - name: delete user for MySQL
+    mysql_user:
+      name: ''
+      login_user: root
+      state: absent
+
+  - name: copy config template
+    template:
+      src: ~/Vagrant/config.template
+      dest: /etc/my.cnf
+    become: yes
+    register: new_conf
+
+  - name: restart_MySQL
+    systemd:
+      name: mariadb
+      state: restarted
+    become: yes
+    when: new_conf is changed
+
+  - name: check user abilities
+    mysql_db:
+      login_user: "{{ db_login }}"
+      login_password: "{{ db_pass }}"
+      login_host: "{{ db_ip }}"
+      name: "{{ db_name }}"
+      state: present 
+

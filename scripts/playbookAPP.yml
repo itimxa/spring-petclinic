@@ -1,0 +1,82 @@
+---
+- hosts: APP_M
+  remote_user: ec2-user
+  become_method: sudo
+  vars:
+    login: '{{ APP_USER }}'
+    password: '{{ APP_PASS }}'
+    project_dir: /home/vagrant/test_env
+    app_dir: /home/{{ login }}/working_app
+
+  tasks:
+  - name: Create application user
+    user:
+      name: '{{ login }}'
+      password: '{{ password }}'
+    become: yes
+  - name: install git and java
+    yum:
+      name: 
+      - git
+      - java-1.8.0-openjdk-devel
+      state: present
+    become: yes
+  
+  # - name: clone git repository
+  #   git:
+  #     repo: 'https://github.com/DmyMi/spring-petclinic'
+  #     dest: "{{ project_dir }}"
+  #   register: latest_version
+      
+  # - name: inastall maven and run application build
+  #   shell: |
+  #     cd {{ project_dir }}
+  #     {{ project_dir }}/mvnw  package
+  #   when: latest_version is changed
+
+  - name: mkdir for application user
+    file:
+      path: "{{ app_dir }}"
+      state: directory
+    become: yes
+    #when: latest_version is changed
+
+  - name: check connect to db
+    wait_for:
+      host: 10.10.0.115
+      port: 3306
+      timeout: 60
+
+  - name: check user abilities
+    mysql_db:
+      login_user: "{{ db_login }}"
+      login_password: "{{ db_pass }}"
+      login_host: "{{ db_ip }}"
+      name: "{{ db_name }}"
+      state: present
+
+  - name: copy jar to application
+    copy:
+      src: ../target/spring-petclinic-2.0.0.BUILD-SNAPSHOT.jar
+      dest: '{{ app_dir }}'
+      owner: '{{ login }}'
+
+    
+
+  # - name: copy jar file
+  #   shell: |
+  #     cp {{ project_dir }}/target/*.jar {{ app_dir }}/
+  #     chown {{ login }}:{{ login }} {{ app_dir }}/*.jar
+  #   become: yes
+  #   when: latest_version is changed
+
+  - name: run app
+    shell: su -c "java -jar {{ app_dir }}/*.jar &" {{ login }}
+    become: yes
+    environment:
+      DB_USER: '{{ DB_USER }}'
+      DB_NAME: '{{ DB_NAME }}'
+      DB_PASS: '{{ DB_PASS }}'
+      DB_HOST: '{{ DB_HOST }}'
+      DB_PORT: '{{ DB_PORT }}'
+
