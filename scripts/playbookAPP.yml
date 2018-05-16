@@ -19,6 +19,7 @@
       name: 
       - git
       - java-1.8.0-openjdk-devel
+      - MySQL-python
       state: present
     become: yes
   
