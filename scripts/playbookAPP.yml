@@ -62,6 +62,7 @@
       src: ../target/spring-petclinic-2.0.0.BUILD-SNAPSHOT.jar
       dest: '{{ app_dir }}'
       owner: '{{ login }}'
+    become: yes
 
     
 
