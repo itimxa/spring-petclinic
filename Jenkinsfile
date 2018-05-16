@@ -28,16 +28,18 @@ pipeline{
     	}
 		stage('provision'){
        		steps{
-            	withCredentials([sshUserPrivateKey(credentialsId: "ssh_key", keyFileVariable: 'keyfile')], [file(credentialsId: 'vars', variable: 'vars.yml')]){
 				parallel(
-				a : {		 
-				sh 'ansible-playbook ./scripts/playbookDB.yml -e "@${vars.yml}" -i ./scripts/hosts --private-key=${keyfile}'
+				a : {
+					withCredentials([sshUserPrivateKey(credentialsId: "ssh_key", keyFileVariable: 'keyfile')], [file(credentialsId: 'vars', variable: 'vars.yml')]){		 
+					sh 'ansible-playbook ./scripts/playbookDB.yml -e "@${vars.yml}" -i ./scripts/hosts --private-key=${keyfile}'
+					}
 				},
 				b : {
-				sh 'ansible-playbook ./scripts/playbookAPP.yml -e "@${vars.yml}" -i ./scripts/hosts --private-key=${keyfile}'	
+					withCredentials([sshUserPrivateKey(credentialsId: "ssh_key", keyFileVariable: 'keyfile')], [file(credentialsId: 'vars', variable: 'vars.yml')]){	
+					sh 'ansible-playbook ./scripts/playbookAPP.yml -e "@${vars.yml}" -i ./scripts/hosts --private-key=${keyfile}'
+					}	
 				}
 				)
-				}
         	}
 		}
 	}
