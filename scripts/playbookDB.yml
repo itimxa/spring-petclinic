@@ -57,11 +57,4 @@
     become: yes
     when: new_conf is changed
 
-  - name: check user abilities
-    mysql_db:
-      login_user: "{{ db_login }}"
-      login_password: "{{ db_pass }}"
-      login_host: "{{ db_ip }}"
-      name: "{{ db_name }}"
-      state: present 
 
