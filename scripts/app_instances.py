@@ -85,7 +85,7 @@ for i in range(app_instances_quantity):
     app_ip_addresses.append(client.describe_instances(
         Filters = [{'Name': 'instance-state-name', 'Values': ['running']},
                 {'Name': 'tag:Name', 'Values': ['application']}])['Reservations'][i]['Instances'][0]['PublicIpAddress'])
-print(app_ipaddr)
+print(app_ipaddresses)
 
 
 def create_file(db_ip, app_ip):
