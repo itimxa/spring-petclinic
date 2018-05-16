@@ -45,7 +45,7 @@
 
   - name: copy config template
     template:
-      src: ./scripts/config.template
+      src: ./scripts/config
       dest: /etc/my.cnf
     become: yes
     register: new_conf
