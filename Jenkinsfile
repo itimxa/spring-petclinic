@@ -32,7 +32,7 @@ pipeline{
 				parallel(
 				a : {		 
 				sh 'ansible-playbook ./scripts/playbookDB.yml -e "@${vars.yml}" -i ./scripts/hosts --private-key=${keyfile}'
-				}
+				},
 				b : {
 				sh 'ansible-playbook ./scripts/playbookAPP.yml -e "@${vars.yml}" -i ./scripts/hosts --private-key=${keyfile}'	
 				}
