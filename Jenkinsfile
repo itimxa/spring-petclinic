@@ -36,7 +36,7 @@ pipeline{
 				},
 				b : {
 					withCredentials([sshUserPrivateKey(credentialsId: "ssh_key", keyFileVariable: 'keyfile'), file(credentialsId: 'vars', variable: 'vars.yml')]){	
-					sh 'ansible-playbook ./scripts/playbookAPP.yml -e "@{vars.yml}" -i ./scripts/hosts --private-key=${keyfile}'
+					sh 'ansible-playbook ./scripts/playbookAPP.yml -e "${vars.yml}" -i ./scripts/hosts --private-key=${keyfile}'
 					}	
 				}
 				)
