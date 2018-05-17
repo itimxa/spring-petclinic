@@ -22,6 +22,6 @@ for i in instances:
     try:
         if data['status'] == 'UP':
             print ("Service with ip %s is running" % (i.public_ip_address))
-            
+
     except NameError:
-        print("No response from ip %s" % (i.public_ip_address))
+        raise ConnectionError("No response from ip %s" % (i.public_ip_address))
