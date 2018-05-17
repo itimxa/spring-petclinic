@@ -75,9 +75,10 @@ print(db_ipaddr)
 
 app_ip_addresses = []
 for i in range(app_instances_quantity):
+    print(i)
     app_ip_addresses.append(client.describe_instances(
         Filters = [{'Name': 'instance-state-name', 'Values': ['running']},
-                {'Name': 'tag:Name', 'Values': ['application']}])['Reservations'][0]['Instances'][i]['PublicIpAddress'])
+                {'Name': 'tag:Name', 'Values': ['application']}])['Reservations'][i]['Instances'][0]['PublicIpAddress'])
 print(app_ip_addresses)
 
 
