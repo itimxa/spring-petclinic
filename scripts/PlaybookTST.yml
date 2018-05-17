@@ -66,20 +66,34 @@
     with_fileglob:
       - ../target/*.jar
   
-  # - name: copy jar file
-  #   shell: |
-  #     cp {{ project_dir }}/target/*.jar {{ app_dir }}/
-  #     chown {{ login }}:{{ login }} {{ app_dir }}/*.jar
-  #   become: yes
-  #   when: latest_version is changed
-
-  - name: run app
-    shell: su -c "java -jar {{ app_dir }}/*.jar &" {{ login }}
+  - name: copy service template
+    template:
+      src: ./service.template
+      dest: /etc/systemd/system/petclinic.service
     become: yes
+    register: new_config
+
+  - name: daemon reload and run app
+    systemd:
+      daemon_reload: yes
+      name: petclinic.service
+      state: started
+    become: yes
+    when: new_config is changed
     environment:
       DB_USER: '{{ DB_USER }}'
       DB_NAME: '{{ DB_NAME }}'
       DB_PASS: '{{ DB_PASS }}'
       DB_HOST: '{{ DB_HOST }}'
       DB_PORT: '{{ DB_PORT }}'
+
+  # - name: run app
+  #   shell: su -c "java -jar {{ app_dir }}/*.jar &" {{ login }}
+  #   become: yes
+  #   environment:
+  #     DB_USER: '{{ DB_USER }}'
+  #     DB_NAME: '{{ DB_NAME }}'
+  #     DB_PASS: '{{ DB_PASS }}'
+  #     DB_HOST: '{{ DB_HOST }}'
+  #     DB_PORT: '{{ DB_PORT }}'
 

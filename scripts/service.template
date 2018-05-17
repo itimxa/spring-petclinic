@@ -1,0 +1,9 @@
+[Use]
+Description=Daemon for spring-petclinic application
+
+[Service]
+ExecStart=/usr/bin/java -jar {{app_dir}}/*.jar
+
+[Install]
+WantedBy=multi-user.target
+
