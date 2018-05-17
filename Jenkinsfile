@@ -4,7 +4,7 @@ pipeline{
 		maven 'mvn 3.5'
 	}
 	parameters {
-    	integer(name: 'quantity', defaultValue: '1', description: 'Quantity of app instances')
+    	string(name: 'quantity', defaultValue: '1', description: 'Quantity of app instances')
     }
 	stages{
 		stage('git clone'){
