@@ -1,11 +1,10 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 import boto3
 import sys
-#import os
 
 try:
 
-    app_instances_quantity = sys.argv[1]
+    app_instances_quantity = int(sys.argv[1])
     try:
         filter_key = sys.argv[2]
         my_filter = [{'Name': 'tag:Name', 'Values': [filter_key]}]
@@ -13,7 +12,7 @@ try:
         my_filter =  [{'Name': 'tag:Name', 'Values': ['vadim*']}]
 
 except ValueError:
-    raise "First argumet should be integer"
+    raise AttributeError("First argumet should be integer")
 
 except IndexError:
     app_instances_quantity = 1
@@ -22,25 +21,20 @@ except IndexError:
 # get my subnet name
 
 client = boto3.client('ec2')
-sub_responce = client.describe_subnets(Filters = my_filter)
+sub_responce = client.describe_subnets(Filters=my_filter)
 subnet_id = sub_responce['Subnets'][0]['SubnetId']
 
 # get security_groups
 
-sec_responce = client.describe_security_groups(Filters = my_filter)
+sec_responce = client.describe_security_groups(Filters=my_filter)
 
 # VARS
-app_instances_quantity = 1  # specify quantity of our application instances
 db_private_ip = '10.10.0.115'
 image_id = 'ami-43eec3a8'
 instance_type = 't2.micro'
 sec_group_id = sec_responce['SecurityGroups'][0]['GroupId']
 subnet_id = sub_responce['Subnets'][0]['SubnetId']
 
-
-# user_data_script = '''#!/bin/bash
-#            sudo yum update -y
-#            sudo yum install java-1.8.0-openjdk-devel'''
 resource = boto3.resource('ec2')
 
 db_machine = resource.create_instances(
@@ -68,9 +62,8 @@ for i in range(app_instances_quantity):
             {'SubnetId': subnet_id, 'DeviceIndex': 0, 'AssociatePublicIpAddress': True, 'Groups': [sec_group_id]}],
         TagSpecifications=[
             {'ResourceType': 'instance', 'Tags': [{'Key': 'Name', 'Value' : 'application'}]}
-            ]#,
-        #UserData=user_data_script
-    )
+            ]
+        )
 
 db_machine[0].wait_until_running()
 app_machine[0].wait_until_running()

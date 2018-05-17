@@ -63,9 +63,7 @@
       dest: '{{ app_dir }}'
       owner: '{{ login }}'
     become: yes
-
-    
-
+  
   # - name: copy jar file
   #   shell: |
   #     cp {{ project_dir }}/target/*.jar {{ app_dir }}/
