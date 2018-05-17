@@ -69,6 +69,7 @@
   - name: extract name of jar file
     shell: ls {app_dir} | grep *.jar
     register: output
+    become: yes
   
   - name: copy service template
     template:
