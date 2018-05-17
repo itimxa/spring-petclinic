@@ -9,9 +9,9 @@ res = boto3.resource('ec2')
 instances = res.instances.filter(Filters = [{'Name': 'instance-state-name', 'Values': ['running']},
                 {'Name': 'tag:Name', 'Values': ['application']}])
 
-counter = 3
+counter = 0
 working_apps = []
-down_apps = ['4']
+down_apps = []
 for i in instances:
     url =  'http://' + i.public_ip_address + ':8080/manage/health'
     counter += 1
