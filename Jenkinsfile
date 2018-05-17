@@ -39,7 +39,7 @@ pipeline{
 				},
 				app_provision : {
 					withCredentials([sshUserPrivateKey(credentialsId: "ssh_key", keyFileVariable: 'keyfile'), file(credentialsId: 'vars', variable: 'vars')]){	
-					sh 'ansible-playbook ./scripts/playbookTST.yml -e "@${vars}" -i ./hosts --private-key=${keyfile} --ssh-common-args="-o StrictHostKeyChecking=no"'
+					sh 'ansible-playbook ./scripts/PlaybookTST.yml -e "@${vars}" -i ./hosts --private-key=${keyfile} --ssh-common-args="-o StrictHostKeyChecking=no"'
 					}	
 				}
 				)
