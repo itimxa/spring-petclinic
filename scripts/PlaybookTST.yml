@@ -65,6 +65,10 @@
     become: yes
     with_fileglob:
       - ../target/*.jar
+
+  - name: extract name of jar file
+    shell: ls {app_dir} | grep *.jar
+    register: output
   
   - name: copy service template
     template:
@@ -72,6 +76,8 @@
       dest: /etc/systemd/system/petclinic.service
     become: yes
     register: new_config
+    with_items:
+      - '{{ output.stdout_lines }}'
 
   - name: daemon reload and run app
     systemd:
