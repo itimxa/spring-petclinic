@@ -5,6 +5,7 @@ pipeline{
 	}
 	parameters {
     	string(name: 'quantity', defaultValue: '1', description: 'Quantity of app instances')
+		string(name: 'filter', defaultValue: 'vadim*', description: 'Filter keyword for security groups')
     }
 	stages{
 		stage('git clone'){
@@ -25,7 +26,7 @@ pipeline{
             	accessKeyVariable: 'AWS_ACCESS_KEY_ID',
             	secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
         		]]) {
-            	sh "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} AWS_DEFAULT_REGION=eu-central-1 python3 ./scripts/app_instances.py ${params.quantity}"
+            	sh "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} AWS_DEFAULT_REGION=eu-central-1 python3 ./scripts/app_instances.py ${params.quantity} ${params.filter}"
         		}
     		}
     	}
