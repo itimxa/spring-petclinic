@@ -47,7 +47,14 @@ pipeline{
 		}
 		stage('health check'){
 			steps{
-				sh 'python3 ./scripts/check.py'
+				withCredentials([[
+            	$class: 'AmazonWebServicesCredentialsBinding',
+            	credentialsId: 'aws_credent',
+            	accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+            	secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+        		]]) {
+				sh "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} AWS_DEFAULT_REGION=eu-central-1 python3 ./scripts/check.py"
+				}
 			}
 		}
 	}

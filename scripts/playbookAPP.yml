@@ -59,10 +59,12 @@
 
   - name: copy jar to application
     copy:
-      src: ../target/spring-petclinic-2.0.0.BUILD-SNAPSHOT.jar
+      src: "{{ item }}" 
       dest: '{{ app_dir }}'
-      owner: '{{ login }}'
+      owner: '{{ login }}' 
     become: yes
+    with_fileglob:
+      - ../target/*.jar
   
   # - name: copy jar file
   #   shell: |
