@@ -10,7 +10,7 @@ instances = res.instances.filter(Filters = [{'Name': 'instance-state-name', 'Val
 
 for i in instances:
     url =  'http://' + i.public_ip_address + ':8080/manage/health'
-    for i in range(6):
+    for j in range(6):
         try:
             request = urllib.request.urlopen(url)
             data = json.loads(request.read().decode('utf-8'))
@@ -21,4 +21,4 @@ for i in instances:
             continue
     
     if data['status'] == 'UP':
-        print ("Service is up")
+        print ("Service with ip %s is running" % (i.public_ip_address))
