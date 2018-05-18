@@ -47,7 +47,7 @@
       delay: 30
       host: 10.10.0.115
       port: 3306
-      timeout: 60
+      
 
   - name: check user abilities
     mysql_db:
@@ -67,7 +67,7 @@
       - ../target/*.jar
 
   - name: extract name of jar file
-    shell: ls {{ app_dir }} | grep *.jar
+    shell: ls {{ app_dir }}
     register: output
     become: yes
   
