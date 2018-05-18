@@ -25,7 +25,9 @@
   
   - name: mkdir for application user
     file:
-      path: "{{ app_dir }}"
+      path: 
+        -"{{ app_dir }}"
+        - /home/{{ login }}/.config/systemd/user
       state: directory
     become: yes
 
