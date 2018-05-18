@@ -2,6 +2,7 @@
 Description=Daemon for spring-petclinic application
 
 [Service]
+User={{ login }}
 Environment=DB_USER={{ DB_USER }}
 Environment=DB_NAME={{ DB_NAME }}
 Environment=DB_PASS={{ DB_PASS }}

@@ -25,12 +25,9 @@
   
   - name: mkdir for application user
     file:
-      path: '{{ item }}'
+      path: "{{ app_dir }}"
       state: directory
     become: yes
-    with_items:
-      -"{{ app_dir }}"
-        - /home/{{ login }}/.config/systemd/user
 
   - name: check connect to db
     wait_for:
@@ -64,9 +61,8 @@
   - name: copy service template
     template:
       src: ./service.template
-      dest: /home/{{ login }}/.config/systemd/user/petclinic.service
+      dest: /etc/systemd/systme/petclinic.service
       owner: '{{ login }}'
-      force: no
     become: yes
     register: new_config
     with_items:
