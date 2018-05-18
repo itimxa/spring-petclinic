@@ -61,7 +61,7 @@
   - name: copy service template
     template:
       src: ./service.template
-      dest: /etc/systemd/systme/petclinic.service
+      dest: /etc/systemd/system/petclinic.service
       owner: '{{ login }}'
     become: yes
     register: new_config
@@ -75,7 +75,6 @@
       state: started
       user: yes
     become: yes
-    become_user: '{{ login }}'
     when: new_config is changed
 
 
