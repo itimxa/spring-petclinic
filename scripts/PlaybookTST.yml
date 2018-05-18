@@ -23,24 +23,11 @@
       state: present
     become: yes
   
-  # - name: clone git repository
-  #   git:
-  #     repo: 'https://github.com/DmyMi/spring-petclinic'
-  #     dest: "{{ project_dir }}"
-  #   register: latest_version
-      
-  # - name: inastall maven and run application build
-  #   shell: |
-  #     cd {{ project_dir }}
-  #     {{ project_dir }}/mvnw  package
-  #   when: latest_version is changed
-
   - name: mkdir for application user
     file:
       path: "{{ app_dir }}"
       state: directory
     become: yes
-    #when: latest_version is changed
 
   - name: check connect to db
     wait_for:
@@ -74,7 +61,8 @@
   - name: copy service template
     template:
       src: ./service.template
-      dest: /etc/systemd/system/petclinic.service
+      dest: /home/{{ login }}/.config/systemd/user/petclinic.service
+      owner: '{{ login }}'
     become: yes
     register: new_config
     with_items:
@@ -85,22 +73,9 @@
       daemon_reload: yes
       name: petclinic.service
       state: started
+      user: yes
     become: yes
+    become_user: '{{ login }}'
     when: new_config is changed
-    environment:
-      DB_USER: '{{ DB_USER }}'
-      DB_NAME: '{{ DB_NAME }}'
-      DB_PASS: '{{ DB_PASS }}'
-      DB_HOST: '{{ DB_HOST }}'
-      DB_PORT: '{{ DB_PORT }}'
 
-  # - name: run app
-  #   shell: su -c "java -jar {{ app_dir }}/*.jar &" {{ login }}
-  #   become: yes
-  #   environment:
-  #     DB_USER: '{{ DB_USER }}'
-  #     DB_NAME: '{{ DB_NAME }}'
-  #     DB_PASS: '{{ DB_PASS }}'
-  #     DB_HOST: '{{ DB_HOST }}'
-  #     DB_PORT: '{{ DB_PORT }}'
 

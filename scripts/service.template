@@ -10,5 +10,5 @@ Environment=DB_PORT={{ DB_PORT }}
 ExecStart=/usr/bin/java -jar {{app_dir}}/{{item}}
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target
 
