@@ -32,9 +32,9 @@ for i in instances:
         down_apps.append(i.public_ip_address)
 
 if len(working_apps) == counter:
-    print('All instances are working properly.\nList of instances:\n' + '\n'.join(working_apps))
+    print('All applications are working properly.\nList of instances:\n' + '\n'.join(working_apps))
 elif not working_apps:  # Check if this list is empty
     raise TimeoutError ("No response from application on all hosts:\n" + '\n'.join(down_apps))
 else:
     warnings.warn("No response from application on hosts:\n" + '\n'.join(down_apps))
-    print('This instances are working properly:\n' + '\n'.join(working_apps))
+    print('Next applications are working properly:\n' + '\n'.join(working_apps))
