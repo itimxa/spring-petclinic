@@ -25,11 +25,12 @@
   
   - name: mkdir for application user
     file:
-      path: 
-        -"{{ app_dir }}"
-        - /home/{{ login }}/.config/systemd/user
+      path: '{{ item }}'
       state: directory
     become: yes
+    with_items:
+      -"{{ app_dir }}"
+        - /home/{{ login }}/.config/systemd/user
 
   - name: check connect to db
     wait_for:
