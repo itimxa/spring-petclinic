@@ -73,7 +73,6 @@
       daemon_reload: yes
       name: petclinic.service
       state: started
-      user: yes
     become: yes
     when: new_config is changed
 

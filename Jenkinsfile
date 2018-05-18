@@ -40,7 +40,7 @@ pipeline{
 				},
 				app_provision : {
 					withCredentials([sshUserPrivateKey(credentialsId: "ssh_key", keyFileVariable: 'keyfile'), file(credentialsId: 'vars', variable: 'vars')]){	
-					sh 'ansible-playbook ./scripts/PlaybookTST.yml -e "@${vars}" -i ./hosts --private-key=${keyfile} --ssh-common-args="-o StrictHostKeyChecking=no"'
+					sh 'ansible-playbook ./scripts/playbookAPPv2.yml -e "@${vars}" -i ./hosts --private-key=${keyfile} --ssh-common-args="-o StrictHostKeyChecking=no"'
 					}	
 				}
 				)
@@ -57,6 +57,18 @@ pipeline{
 				sh "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} AWS_DEFAULT_REGION=eu-central-1 python3 ./scripts/check.py"
 				}
 			}
+		}
+	}
+	post { 
+    	failure { 
+            withCredentials([[
+            	$class: 'AmazonWebServicesCredentialsBinding',
+            	credentialsId: 'aws_credent',
+            	accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+            	secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+        		]]) {
+            	sh "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} AWS_DEFAULT_REGION=eu-central-1 python3 ./scripts/terminate_instances.py"
+        		}
 		}
 	}
 }
