@@ -2,11 +2,11 @@
 Description=Daemon for spring-petclinic application
 
 [Service]
-Environment={{ DB_USER }}
-Environment={{ DB_NAME }}
-Environment={{ DB_PASS }}
-Environment={{ DB_HOST }}
-Environment={{ DB_PORT }}
+Environment=DB_USER={{ DB_USER }}
+Environment=DB_NAME={{ DB_NAME }}
+Environment=DB_PASS={{ DB_PASS }}
+Environment=DB_HOST={{ DB_HOST }}
+Environment=DB_PORT={{ DB_PORT }}
 ExecStart=/usr/bin/java -jar {{app_dir}}/{{item}}
 
 [Install]
