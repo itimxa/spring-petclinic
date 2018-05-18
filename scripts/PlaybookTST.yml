@@ -65,6 +65,7 @@
       src: ./service.template
       dest: /home/{{ login }}/.config/systemd/user/petclinic.service
       owner: '{{ login }}'
+      force: no
     become: yes
     register: new_config
     with_items:
